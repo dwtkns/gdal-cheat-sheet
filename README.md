@@ -123,7 +123,7 @@ __Create contours from DEM__
 Other
 ---
 
-__Convert KML to CSV (WKT)__
+__Convert KML to CSV (WKT)__  
 First list layers in the KML file
 
 	ogrinfo -so input.kml
