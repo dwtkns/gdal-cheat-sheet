@@ -25,7 +25,7 @@ __Clip vectors by bounding box__
 
 __Clip one vector by another__
 
-		ogr2ogr -clipsrc clipping_polygon.shp output.shp input.shp
+	ogr2ogr -clipsrc clipping_polygon.shp output.shp input.shp
 
 __Reproject vector:__
 
@@ -92,7 +92,7 @@ Then apply those colors to a DEM:
 
 	gdaldem color-relief input.tif color_ramp.txt color-relief.tif
 
-__Create slope-shading from a DEM__
+__Create slope-shading from a DEM__  
 First, make a slope raster from DEM:
 
 		gdaldem slope input.tif slope.tif 
@@ -100,12 +100,12 @@ First, make a slope raster from DEM:
 Second, create a color-slope.txt file:  
 _(Slope angle, Red, Green, Blue)_
 
-		0 255 255 255
-		90 0 0 0
+	0 255 255 255
+	90 0 0 0  
 
-Finally, color the slope raster based on angles in color-slope.txt:
+Finally, color the slope raster based on angles in color-slope.txt:  
 
-		gdaldem color-relief slope.tif color-slope.txt slopeshade.tif
+	gdaldem color-relief slope.tif color-slope.txt slopeshade.tif
 
 __Resample raster__
 
