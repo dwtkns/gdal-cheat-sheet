@@ -17,7 +17,7 @@ __List vector drivers__
 
 __Convert between vector formats__
 
-	ogr2ogr -f <output_format> <output_file> <options> <input_file>
+	ogr2ogr -f "GeoJSON" output.json input.shp
 
 __Clip vectors by bounding box__
 
@@ -59,7 +59,7 @@ __List raster drivers__
 
 __Convert between raster formats__
 
-	gdal_translate -of <output_format> input.grd output.tif
+	gdal_translate -of "GeoTIFF" input.grd output.tif
 
 __Reproject raster:__
 
@@ -113,7 +113,7 @@ __Resample raster__
 
 __Burn vector into raster__
 
-	gdal_rasterize -b 1 -i -burn -32678 -l wgs84_pierce_county wgs84_pierce_county.shp masked_pierce_dem.tif
+	gdal_rasterize -b 1 -i -burn -32678 -l layername input.shp input.tif
 
 __Create contours from DEM__
 
