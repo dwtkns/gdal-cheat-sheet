@@ -161,6 +161,8 @@ Create shapefile based on parameters listed in the .vrt
 Sources
 ---
 
+<http://live.osgeo.org/en/quickstart/gdal_quickstart.html>
+
 <https://github.com/nvkelso/geo-how-to/wiki/OGR-to-reproject,-modify-Shapefiles>  
 
 <ftp://ftp.remotesensing.org/gdal/presentations/OpenSource_Weds_Andre_CUGOS.pdf>  
