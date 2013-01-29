@@ -109,7 +109,9 @@ Finally, color the slope raster based on angles in color-slope.txt:
 
 __Resample raster__
 
-	gdalwarp -ts 3672 2520 -r cubicspline st_helens_dem.tif 2x_st_helens_dem.tif
+	gdalwarp -ts <width> <height> -r cubicspline dem.tif resampled_dem.tif
+
+Entering 0 for either width or height guesses based on current dimensions.
 
 __Burn vector into raster__
 
