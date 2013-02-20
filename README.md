@@ -167,6 +167,25 @@ Create shapefile based on parameters listed in the .vrt
 
 	ogr2ogr -f "ESRI Shapefile" /output_dir parameters.vrt
 
+__MODIS operations__
+
+First, download relevant .hdf tiles from the [MODIS ftp site](ftp://ladsftp.nascom.nasa.gov/); use the [MODIS sinusoidal grid](ftp://ladsftp.nascom.nasa.gov/) for reference.
+
+Create a file containing the names of all .hdf files in the directory
+	ls -1 *.hdf > files.txt
+
+List MODIS Subdatasets in a given HDF (conf. the [MODIS products table](https://lpdaac.usgs.gov/products/modis_products_table/)
+	gdalinfo longFileName.hdf | grep SUBDATASET
+
+Make TIFs from each file in list; replace 'MOD12Q1:Land_Cover_Type_1' with desired Subdataset name
+	mkdir output
+	cat files.txt | xargs -I % -n1 gdalwarp -of GTiff 'HDF4_EOS:EOS_GRID:%:MOD12Q1:Land_Cover_Type_1' output/%.tif
+
+Merge all .tifs in output directory into single file
+	cd output
+	gdal_merge.py -o Merged_Landcover.tif *.tif
+
+
 Sources
 ---
 
@@ -181,3 +200,7 @@ Sources
 <http://linfiniti.com/2010/12/a-workflow-for-creating-beautiful-relief-shaded-dems-using-gdal/>  
 
 <http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/OGR_example>  
+
+<http://www.gdal.org/frmt_hdf4.html>
+
+<http://planetflux.adamwilson.us/2010/06/modis-processing-with-r-gdal-and-nco.html>
