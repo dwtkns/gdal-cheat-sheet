@@ -69,7 +69,11 @@ __Merge rasters__
 
 	gdal_merge.py -o merged.tif input1.tif input2.tif
 
-Alternatively, to preserve nodata values:
+Alternatively,
+
+	gdalwarp input1.tif input2.tif merged.tif
+	
+Or, to preserve nodata values:
 
 	gdalwarp input1.tif input2.tif merged.tif -srcnodata <NoData value> -dstnodata <merged NoData value>
 
