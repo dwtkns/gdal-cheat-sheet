@@ -21,7 +21,7 @@ __Convert between vector formats__
 
 __Clip vectors by bounding box__
 
-	ogr2ogr -f "ESRI Shapefile" output.shp input.shp -clipsrc x_min y_min x_max y_max
+	ogr2ogr -f "ESRI Shapefile" output.shp input.shp -clipsrc <x_min> <y_min> <x_max> <y_max>
 
 __Clip one vector by another__
 
@@ -64,6 +64,14 @@ __Convert between raster formats__
 __Reproject raster:__
 
 	gdalwarp -t_srs "EPSG:102003" input.tif output.tif
+	
+__Clip raster by bounding box__
+
+	gdalwarp -te <x_min> <y_min> <x_max> <y_max> input.tif clipped_output.tif
+	
+__Clip raster to SHP / NoData for pixels beyond polygon boundary__
+
+	gdalwarp -dstnodata <nodata_value> -cutline input_polygon.shp input.tif clipped_output.tif
 
 __Merge rasters__
 
@@ -75,7 +83,7 @@ Alternatively,
 	
 Or, to preserve nodata values:
 
-	gdalwarp input1.tif input2.tif merged.tif -srcnodata <NoData value> -dstnodata <merged NoData value>
+	gdalwarp input1.tif input2.tif merged.tif -srcnodata <nodata_value> -dstnodata <merged_nodata_value>
 
 
 __Create a hillshade from a DEM__
@@ -144,6 +152,7 @@ Convert the desired KML layer to CSV
 	ogr2ogr -f CSV output.csv input.kml -sql "select *,OGR_GEOM_WKT from some_kml_layer"
 
 __CSV points to SHP__  
+_This section needs retooling_  
 Given input.csv
 
 	lon,lat,value
@@ -173,13 +182,13 @@ Create shapefile based on parameters listed in the .vrt
 
 __MODIS operations__
 
-First, download relevant .hdf tiles from the [MODIS ftp site](ftp://ladsftp.nascom.nasa.gov/); use the [MODIS sinusoidal grid](ftp://ladsftp.nascom.nasa.gov/) for reference.
+First, download relevant .hdf tiles from the MODIS ftp site: <ftp://ladsftp.nascom.nasa.gov/>; use the [MODIS sinusoidal grid](http://www.geohealth.ou.edu/modis_v5/modis.shtml) for reference.
 
 Create a file containing the names of all .hdf files in the directory
 
 	ls -1 *.hdf > files.txt
 
-List MODIS Subdatasets in a given HDF (conf. the [MODIS products table](https://lpdaac.usgs.gov/products/modis_products_table/)
+List MODIS Subdatasets in a given HDF (conf. the [MODIS products table](https://lpdaac.usgs.gov/products/modis_products_table/))
 
 	gdalinfo longFileName.hdf | grep SUBDATASET
 
@@ -212,3 +221,4 @@ Sources
 <http://www.gdal.org/frmt_hdf4.html>
 
 <http://planetflux.adamwilson.us/2010/06/modis-processing-with-r-gdal-and-nco.html>
+
