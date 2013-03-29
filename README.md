@@ -160,25 +160,28 @@ Given input.csv
 	-81,32,14
 	-81,32,15
 
-Make a .dbf table from input.csv
+Make a .dbf table for ogr2ogr to work with from input.csv
 
-	ogr2ogr -f "ESRI Shapefile" output_dir/output.dbf input.csv
+	ogr2ogr -f "ESRI Shapefile" input.dbf input.csv
 
-Use a text editor to create a .vrt file in the same directory
+Use a text editor to create a .vrt file in the same directory as input.csv and input.dbf
 
 	<OGRVRTDataSource>
-	  <OGRVRTLayer name="output">
-	    <SrcDataSource relativeToVRT="1">/output_dir</SrcDataSource>
+	  <OGRVRTLayer name="output_file_name">
+	    <SrcDataSource relativeToVRT="1">./</SrcDataSource>
 	    <SrcLayer>input</SrcLayer>
 	    <GeometryType>wkbPoint</GeometryType>
 	    <LayerSRS>WGS84</LayerSRS>
-	    <GeometryField encoding="PointFromColumns" x="lon" y="lat"/>
+	    <GeometryField encoding="PointFromColumns" x="lon_column_name" y="lat_column_name"/>
 	  </OGRVRTLayer>
 	</OGRVRTDataSource>
 
 Create shapefile based on parameters listed in the .vrt
 
-	ogr2ogr -f "ESRI Shapefile" /output_dir parameters.vrt
+	mkdir shp
+	ogr2ogr -f "ESRI Shapefile" shp/ inputfile.vrt
+
+The VRT file can be modified to give a new output shapefile name, reference a different coordinate system (LayerSRS), or pull coordinates from different columns.
 
 __MODIS operations__
 
