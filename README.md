@@ -155,7 +155,7 @@ __CSV points to SHP__
 _This section needs retooling_  
 Given input.csv
 
-	lon,lat,value
+	lon_column,lat_column,value
 	-81,32,13
 	-81,32,14
 	-81,32,15
@@ -164,7 +164,7 @@ Make a .dbf table for ogr2ogr to work with from input.csv
 
 	ogr2ogr -f "ESRI Shapefile" input.dbf input.csv
 
-Use a text editor to create a .vrt file in the same directory as input.csv and input.dbf
+Use a text editor to create a .vrt file in the same directory as input.csv and input.dbf. This file holds the parameters for building a full shapefile based on values in the DBF you just made.
 
 	<OGRVRTDataSource>
 	  <OGRVRTLayer name="output_file_name">
@@ -172,7 +172,7 @@ Use a text editor to create a .vrt file in the same directory as input.csv and i
 	    <SrcLayer>input</SrcLayer>
 	    <GeometryType>wkbPoint</GeometryType>
 	    <LayerSRS>WGS84</LayerSRS>
-	    <GeometryField encoding="PointFromColumns" x="lon_column_name" y="lat_column_name"/>
+	    <GeometryField encoding="PointFromColumns" x="lon_column" y="lat_column"/>
 	  </OGRVRTLayer>
 	</OGRVRTDataSource>
 
