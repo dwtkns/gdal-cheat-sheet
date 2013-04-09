@@ -64,7 +64,11 @@ __Convert between raster formats__
 __Reproject raster:__
 
 	gdalwarp -t_srs "EPSG:102003" input.tif output.tif
-	
+
+__Georeference an unprojected image with known bounding coordinates:__
+
+	gdal_translate -of GTiff -a_ullr <top_left_lon> <top_left_lat> <bottom_right_lon> <bottom_right_lat> -a_srs EPSG:4269 input.png output.tif
+
 __Clip raster by bounding box__
 
 	gdalwarp -te <x_min> <y_min> <x_max> <y_max> input.tif clipped_output.tif
