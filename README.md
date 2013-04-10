@@ -229,3 +229,5 @@ Sources
 
 <http://planetflux.adamwilson.us/2010/06/modis-processing-with-r-gdal-and-nco.html>
 
+<http://trac.osgeo.org/gdal/wiki/FAQRaster>
+
