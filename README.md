@@ -5,7 +5,7 @@ Vector operations
 
 __Get vector information__
 
-	ogrinfo -so input.shp
+	ogrinfo -so input.shp layer-name
 
 __Print vector extent__
 
