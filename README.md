@@ -46,6 +46,11 @@ To extract type 'pond' from water.shp
 
 	ogr2ogr -where "type = pond" ponds.shp water.shp
 
+__Subset & filter all shapefiles in a directory__
+
+Assumes that filename and name of layer of interest are the same...  
+
+	ls -1 *.shp | sed 's/.shp//g' | xargs -n1 -I % ogr2ogr %-subset.shp %.shp -sql "SELECT field-one, field-two FROM '%' WHERE field-one='value-of-interest'"
 
 Raster operations
 ---
