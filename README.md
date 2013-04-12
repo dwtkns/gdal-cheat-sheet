@@ -9,7 +9,7 @@ __Get vector information__
 
 __Print vector extent__
 
-	ogrinfo input.shp layername | grep Extent
+	ogrinfo input.shp layer-name | grep Extent
 
 __List vector drivers__
 
