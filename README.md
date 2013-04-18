@@ -64,7 +64,11 @@ __List raster drivers__
 
 __Convert between raster formats__
 
-	gdal_translate -of "GeoTIFF" input.grd output.tif
+	gdal_translate -of "GTiff" input.grd output.tif
+
+__Convert a directory of files to a different raster format__
+
+	ls -1 *.img | sed 's/.img//g' | xargs -n1 -I % gdal_translate -of "GTiff" %.img %.tif
 
 __Reproject raster:__
 
