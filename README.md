@@ -107,7 +107,7 @@ Change light direction:
 
 	gdaldem hillshade -of PNG -az 135 input.tif hillshade_az135.png 
 
-Use correct vertical scaling if input is projected in degrees
+Use correct vertical scaling in meters if input is projected in degrees
 	
 	gdaldem hillshade -s 111120 -of PNG input_WGS1984.tif hillshade.png
 
