@@ -7,6 +7,10 @@ __Get vector information__
 
 	ogrinfo -so input.shp layer-name
 
+Or, for all layers  
+
+	ogrinfo -al -so input.shp
+
 __Print vector extent__
 
 	ogrinfo input.shp layer-name | grep Extent
