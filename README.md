@@ -161,6 +161,9 @@ __Create contours from DEM__
 
 Other
 ---
+__Convert KML points to CSV (simple)__
+
+	ogr2ogr -f CSV output.csv input.kmz -lco GEOMETRY=AS_XY
 
 __Convert KML to CSV (WKT)__  
 First list layers in the KML file
