@@ -253,3 +253,5 @@ Sources
 <http://www.mikejcorey.com/wordpress/2011/02/05/tutorial-create-beautiful-hillshade-maps-from-digital-elevation-models-with-gdal-and-mapnik/>
 
 <http://dirkraffel.com/2011/07/05/best-way-to-merge-color-relief-with-shaded-relief-map/>
+
+<http://gfoss.blogspot.com/2008/06/gdal-raster-data-tips-and-tricks.html>
