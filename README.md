@@ -89,6 +89,10 @@ __Clip raster by bounding box__
 __Clip raster to SHP / NoData for pixels beyond polygon boundary__
 
 	gdalwarp -dstnodata <nodata_value> -cutline input_polygon.shp input.tif clipped_output.tif
+	
+__Crop raster dimensions to vector bounding box__
+	
+	gdalwarp -cutline cropper.shp -crop_to_cutline input.tif cropped_output.tif
 
 __Merge rasters__
 
