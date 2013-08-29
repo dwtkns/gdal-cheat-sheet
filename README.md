@@ -70,6 +70,11 @@ __Convert between raster formats__
 
 	gdal_translate -of "GTiff" input.grd output.tif
 
+__Convert 16-bit bands (UInt16) to Byte type__  
+(Useful for Landsat 8 imagery...)
+
+	gdal_translate -of "GTiff" -co "COMPRESS=LZW" -scale 0 65535 0 255 -ot Byte input_uint16.tif output_byte.tif
+
 __Convert a directory of files to a different raster format__
 
 	ls -1 *.img | sed 's/.img//g' | xargs -n1 -I % gdal_translate -of "GTiff" %.img %.tif
@@ -232,6 +237,62 @@ Merge all .tifs in output directory into single file
 	cd output
 	gdal_merge.py -o Merged_Landcover.tif *.tif
 
+__BASH functions__  
+These extent functions echo the extent of the given file in the order/format expected by gdal_translate -projwin.
+(Originally from [Linfiniti](http://linfiniti.com/2009/09/clipping-rasters-with-gdal-using-polygons/)).
+
+Extents can be passed directly into a gdal_translate command like so:
+
+	gdal_translate -projwin $(ogr_extent boundingbox.shp) input.tif clipped_output.tif
+
+This can be used with bounding shapes drawn with tools like [geojson.io](http://geojson.io/) to quickly crop an image without losing attached geodata. Add these to your ~/.bash_profile file for easy terminal access.
+
+	function gdal_extent() {
+		if [ -z "$1" ]; then 
+			echo "Missing arguments. Syntax:"
+			echo "  gdal_extent <input_raster>"
+	    	return
+		fi
+		EXTENT=$(gdalinfo $1 |\
+			grep "Upper Left\|Lower Right" |\
+			sed "s/Upper Left  //g;s/Lower Right //g;s/).*//g" |\
+			tr "\n" " " |\
+			sed 's/ *$//g' |\
+			tr -d "[(,]")
+		echo -n "$EXTENT"
+	}
+
+	function ogr_extent() {
+		if [ -z "$1" ]; then 
+			echo "Missing arguments. Syntax:"
+			echo "  ogr_extent <input_vector>"
+	    	return
+		fi
+		EXTENT=$(ogrinfo -al -so $1 |\
+			grep Extent |\
+			sed 's/Extent: //g' |\
+			sed 's/(//g' |\
+			sed 's/)//g' |\
+			sed 's/ - /, /g')
+		EXTENT=`echo $EXTENT | awk -F ',' '{print $1 " " $4 " " $3 " " $2}'`
+		echo -n "$EXTENT"
+	}
+
+	function ogr_layer_extent() {
+		if [ -z "$2" ]; then 
+			echo "Missing arguments. Syntax:"
+			echo "  ogr_extent <input_vector> <layer_name>"
+	    	return
+		fi
+		EXTENT=$(ogrinfo -so $1 $2 |\
+			grep Extent |\
+			sed 's/Extent: //g' |\
+			sed 's/(//g' |\
+			sed 's/)//g' |\
+			sed 's/ - /, /g')
+		EXTENT=`echo $EXTENT | awk -F ',' '{print $1 " " $4 " " $3 " " $2}'`
+		echo -n "$EXTENT"
+	}
 
 Sources
 ---
