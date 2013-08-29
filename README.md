@@ -307,6 +307,8 @@ Sources
 
 <http://linfiniti.com/2010/12/a-workflow-for-creating-beautiful-relief-shaded-dems-using-gdal/>  
 
+<http://linfiniti.com/2009/09/clipping-rasters-with-gdal-using-polygons/>  
+
 <http://nautilus.baruch.sc.edu/twiki_dmcc/bin/view/Main/OGR_example>  
 
 <http://www.gdal.org/frmt_hdf4.html>
