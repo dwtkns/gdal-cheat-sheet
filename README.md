@@ -238,14 +238,24 @@ Merge all .tifs in output directory into single file
 	gdal_merge.py -o Merged_Landcover.tif *.tif
 
 __BASH functions__  
+_Size Functions_  
+This size function echos the pixel dimensions of a given file in the format expected by gdalwarp.
+
+	function gdal_size() {
+		SIZE=$(gdalinfo $1 |\
+			grep 'Size is ' |\
+			cut -d\   -f3-4 |\
+			sed 's/,//g')
+		echo -n "$SIZE"
+	}
+
+This can be used to easily resample one raster to the dimensions of another:
+
+	gdalwarp -ts $(gdal_size bigraster.tif) -r cubicspline smallraster.tif resampled_smallraster.tif
+
+_Extent Functions_  
 These extent functions echo the extent of the given file in the order/format expected by gdal_translate -projwin.
 (Originally from [Linfiniti](http://linfiniti.com/2009/09/clipping-rasters-with-gdal-using-polygons/)).
-
-Extents can be passed directly into a gdal_translate command like so:
-
-	gdal_translate -projwin $(ogr_extent boundingbox.shp) input.tif clipped_output.tif
-
-This can be used with bounding shapes drawn with tools like [geojson.io](http://geojson.io/) to quickly crop an image without losing attached geodata. Add these to your ~/.bash_profile file for easy terminal access.
 
 	function gdal_extent() {
 		if [ -z "$1" ]; then 
@@ -293,6 +303,13 @@ This can be used with bounding shapes drawn with tools like [geojson.io](http://
 		EXTENT=`echo $EXTENT | awk -F ',' '{print $1 " " $4 " " $3 " " $2}'`
 		echo -n "$EXTENT"
 	}
+
+Extents can be passed directly into a gdal_translate command like so:
+
+	gdal_translate -projwin $(ogr_extent boundingbox.shp) input.tif clipped_output.tif
+
+This can be used with bounding shapes drawn with tools like [geojson.io](http://geojson.io/) to quickly crop an image without losing attached geodata. Add these to your ~/.bash_profile file for easy terminal access.
+
 
 Sources
 ---
