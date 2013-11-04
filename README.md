@@ -343,3 +343,5 @@ Sources
 <http://dirkraffel.com/2011/07/05/best-way-to-merge-color-relief-with-shaded-relief-map/>
 
 <http://gfoss.blogspot.com/2008/06/gdal-raster-data-tips-and-tricks.html>
+
+<http://osgeo-org.1560.x6.nabble.com/gdal-dev-Dissolve-shapefile-using-GDAL-OGR-td5036930.html>
