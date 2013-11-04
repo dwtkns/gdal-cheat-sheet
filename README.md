@@ -35,7 +35,11 @@ __Reproject vector:__
 
 	ogr2ogr output.shp -t_srs "EPSG:4326" input.shp
 
-__Merge vectors:__
+__Merge features in a vector file by attribute ("dissolve")__
+
+	ogr2ogr -f "ESRI Shapefile" dissolved.shp input.shp -dialect sqlite -sql "select ST_union(Geometry),common_attribute from input GROUP BY common_attribute"
+
+__Merge vector files:__
 
 	ogr2ogr merged.shp input1.shp
 	ogr2ogr -update -append merged.shp input2.shp -nln merged
