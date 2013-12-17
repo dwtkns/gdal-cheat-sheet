@@ -79,6 +79,10 @@ __Convert 16-bit bands (UInt16) to Byte type__
 
 	gdal_translate -of "GTiff" -co "COMPRESS=LZW" -scale 0 65535 0 255 -ot Byte input_uint16.tif output_byte.tif
 
+You can change '0' and '65535' to your image's actual min/max values to preserve more color variation or to apply the scaling to other band types - find that number with:
+
+	gdalinfo -mm input.tif | grep Min/Max
+	
 __Convert a directory of files to a different raster format__
 
 	ls -1 *.img | sed 's/.img//g' | xargs -n1 -I % gdal_translate -of "GTiff" %.img %.tif
