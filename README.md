@@ -74,7 +74,7 @@ __Convert between raster formats__
 
 	gdal_translate -of "GTiff" input.grd output.tif
 
-__Convert 16-bit bands (UInt16) to Byte type__  
+__Convert 16-bit bands (Int16 or UInt16) to Byte type__  
 (Useful for Landsat 8 imagery...)
 
 	gdal_translate -of "GTiff" -co "COMPRESS=LZW" -scale 0 65535 0 255 -ot Byte input_uint16.tif output_byte.tif
