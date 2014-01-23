@@ -90,6 +90,8 @@ __Convert a directory of files to a different raster format__
 __Reproject raster:__
 
 	gdalwarp -t_srs "EPSG:102003" input.tif output.tif
+	
+Be sure to add _-r bilinear_ if reprojecting elevation data to prevent funky banding artifacts.
 
 __Georeference an unprojected image with known bounding coordinates:__
 
@@ -161,7 +163,7 @@ Finally, color the slope raster based on angles in color-slope.txt:
 
 	gdaldem color-relief slope.tif color-slope.txt slopeshade.tif
 
-__Resample raster__
+__Resample (resize) raster__
 
 	gdalwarp -ts <width> <height> -r cubicspline dem.tif resampled_dem.tif
 
@@ -349,3 +351,5 @@ Sources
 <http://gfoss.blogspot.com/2008/06/gdal-raster-data-tips-and-tricks.html>
 
 <http://osgeo-org.1560.x6.nabble.com/gdal-dev-Dissolve-shapefile-using-GDAL-OGR-td5036930.html>
+
+<https://www.mapbox.com/tilemill/docs/guides/terrain-data/>
