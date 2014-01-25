@@ -322,7 +322,7 @@ or
 	
 	gdal_translate -projwin $(gdal_extent target_crop.tif) input.tif clipped_output.tif
 
-This can be used to quickly crop an image without losing attached geodata. Also useful to quickly crop one raster to the same extent as another. Add these to your ~/.bash_profile file for easy terminal access.
+This can be a useful way to quickly crop one raster to the same extent as another. Add these to your ~/.bash_profile file for easy terminal access.
 
 
 Sources
