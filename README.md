@@ -317,8 +317,12 @@ These extent functions echo the extent of the given file in the order/format exp
 Extents can be passed directly into a gdal_translate command like so:
 
 	gdal_translate -projwin $(ogr_extent boundingbox.shp) input.tif clipped_output.tif
+	
+or
+	
+	gdal_translate -projwin $(gdal_extent target_crop.tif) input.tif clipped_output.tif
 
-This can be used with bounding shapes drawn with tools like [geojson.io](http://geojson.io/) to quickly crop an image without losing attached geodata. Add these to your ~/.bash_profile file for easy terminal access.
+This can be used to quickly crop an image without losing attached geodata. Also useful to quickly crop one raster to the same extent as another. Add these to your ~/.bash_profile file for easy terminal access.
 
 
 Sources
