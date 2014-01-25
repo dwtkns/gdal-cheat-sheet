@@ -1,4 +1,4 @@
-Cheat sheet for GDAL/OGR command-line tools
+Cheat sheet for GDAL/OGR command-line geodata tools
 
 Vector operations
 ---
