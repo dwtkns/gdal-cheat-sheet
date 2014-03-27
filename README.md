@@ -122,6 +122,18 @@ Or, to preserve nodata values:
 	gdalwarp input1.tif input2.tif merged.tif -srcnodata <nodata_value> -dstnodata <merged_nodata_value>
 
 
+__Raster calculation (map algebra)__
+
+Average two rasters:
+
+	gdal_calc.py -A input1.tif -B input2.tif --outfile=output.tif --calc="(A+B)/2"
+
+Add two rasters:
+
+	gdal_calc.py -A input1.tif -B input2.tif --outfile=output.tif --calc="A+B"
+
+etc.
+
 __Create a hillshade from a DEM__
 
 	gdaldem hillshade -of PNG input.tif hillshade.png
