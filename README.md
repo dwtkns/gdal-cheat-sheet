@@ -189,6 +189,10 @@ __Create contours from DEM__
 
 	gdal_contour -a elev -i 50 input_dem.tif output_contours.shp
 
+__Get values for a specific location in a raster__
+
+	gdallocationinfo -xml -wgs84 input.tif <lon> <lat>  
+
 
 Other
 ---
