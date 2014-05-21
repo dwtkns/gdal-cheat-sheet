@@ -121,7 +121,12 @@ Or, to preserve nodata values:
 
 	gdalwarp input1.tif input2.tif merged.tif -srcnodata <nodata_value> -dstnodata <merged_nodata_value>
 
+__Stack grayscale bands into a georeferenced RGB__
 
+Where LC81690372014137LGN00 is a Landsat 8 ID and B4, B3 and B2 correspond to R,G,B bands respectively:
+
+	gdal_merge.py -co "PHOTOMETRIC=RGB" -separate LC81690372014137LGN00_B{4,3,2}.tif -o LC81690372014137LGN00_rgb.tif
+	
 __Raster calculation (map algebra)__
 
 Average two rasters:
