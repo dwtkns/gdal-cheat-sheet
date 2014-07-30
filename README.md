@@ -126,6 +126,14 @@ __Stack grayscale bands into a georeferenced RGB__
 Where LC81690372014137LGN00 is a Landsat 8 ID and B4, B3 and B2 correspond to R,G,B bands respectively:
 
 	gdal_merge.py -co "PHOTOMETRIC=RGB" -separate LC81690372014137LGN00_B{4,3,2}.tif -o LC81690372014137LGN00_rgb.tif
+
+__Fix an RGB TIF whose bands don't know they're RGB__
+
+	gdal_merge.py -co "PHOTOMETRIC=RGB" input.tif -o output_rgb.tif
+
+__Export a raster for Google Earth__
+
+	gdal_translate -of KMLSUPEROVERLAY input.tif output.kmz -co FORMAT=JPEG
 	
 __Raster calculation (map algebra)__
 
@@ -378,3 +386,8 @@ Sources
 <http://osgeo-org.1560.x6.nabble.com/gdal-dev-Dissolve-shapefile-using-GDAL-OGR-td5036930.html>
 
 <https://www.mapbox.com/tilemill/docs/guides/terrain-data/>
+
+<https://gist.github.com/ashaw/0862ec044c45b9aa3c76>
+
+<https://github.com/gina-alaska/dans-gdal-scripts>
+
