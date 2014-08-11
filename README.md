@@ -14,6 +14,10 @@ Or, for all layers
 __Print vector extent__
 
 	ogrinfo input.shp layer-name | grep Extent
+	
+__Print unique count of values for custom vector__
+
+	ogrinfo input.shp layer-name | grep custom_vector | sort | uniq -c
 
 __List vector drivers__
 
