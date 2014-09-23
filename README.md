@@ -73,6 +73,14 @@ __Get raster information__
 __List raster drivers__
 
 	gdal_translate --formats
+	
+__Force creation of world file (requires libgeotiff)__
+
+	listgeo -tfw  mappy.tif
+	
+__Report PROJ.4 projection info, including bounding box (requires libgeotiff)__
+
+	listgeo -proj4 mappy.tif
 
 __Convert between raster formats__
 
