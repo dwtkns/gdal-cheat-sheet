@@ -15,10 +15,6 @@ __Print vector extent__
 
 	ogrinfo input.shp layer-name | grep Extent
 	
-__Print count of features with attributes matching a given pattern__
-
-	ogrinfo input.shp layer-name | grep "Search Pattern" | sort | uniq -c
-
 __List vector drivers__
 
 	ogr2ogr --formats
@@ -26,6 +22,10 @@ __List vector drivers__
 __Convert between vector formats__
 
 	ogr2ogr -f "GeoJSON" output.json input.shp
+
+__Print count of features with attributes matching a given pattern__
+
+	ogrinfo input.shp layer-name | grep "Search Pattern" | sort | uniq -c
 
 __Clip vectors by bounding box__
 
