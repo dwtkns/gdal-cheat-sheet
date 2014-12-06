@@ -42,6 +42,10 @@ __Reproject vector:__
 __Merge features in a vector file by attribute ("dissolve")__
 
 	ogr2ogr -f "ESRI Shapefile" dissolved.shp input.shp -dialect sqlite -sql "select ST_union(Geometry),common_attribute from input GROUP BY common_attribute"
+	
+__Merge features ("dissolve") using a buffer to avoid slivers__
+
+	ogr2ogr -f "ESRI Shapefile" dissolved.shp input.shp -dialect sqlite -sql "select ST_union(ST_buffer(Geometry,0.001)),common_attribute from input GROUP BY common_attribute"
 
 __Merge vector files:__
 
