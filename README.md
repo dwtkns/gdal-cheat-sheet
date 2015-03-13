@@ -67,6 +67,11 @@ __Subset & filter all shapefiles in a directory__
 Assumes that filename and name of layer of interest are the same...  
 
 	ls -1 *.shp | sed 's/.shp//g' | xargs -n1 -I % ogr2ogr %-subset.shp %.shp -sql "SELECT field-one, field-two FROM '%' WHERE field-one='value-of-interest'"
+	
+__Extract data from a PostGis database to a GeoJSON file__
+
+	ogr2ogr -f "GeoJSON" file.geojson PG:"host=localhost dbname=database user=user password=password" \
+	-sql "SELECT * from table_name"
 
 Raster operations
 ---
