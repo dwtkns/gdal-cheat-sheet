@@ -66,8 +66,8 @@ __Subset & filter all shapefiles in a directory__
 
 Assumes that filename and name of layer of interest are the same...  
 
-	ls -1 *.shp | sed 's/.shp//g' | xargs -n1 -I % ogr2ogr %-subset.shp %.shp -sql "SELECT field-one, field-two FROM '%' WHERE field-one='value-of-interest'"
-	
+	basename -s.shp *.shp | xargs -n1 -I % ogr2ogr %-subset.shp %.shp -sql "SELECT field-one, field-two FROM '%' WHERE field-one='value-of-interest'"
+
 __Extract data from a PostGis database to a GeoJSON file__
 
 	ogr2ogr -f "GeoJSON" file.geojson PG:"host=localhost dbname=database user=user password=password" \
@@ -104,9 +104,9 @@ You can change '0' and '65535' to your image's actual min/max values to preserve
 
 	gdalinfo -mm input.tif | grep Min/Max
 	
-__Convert a directory of files to a different raster format__
+__Convert a directory of raster files of the same format to another raster format__
 
-	ls -1 *.img | sed 's/.img//g' | xargs -n1 -I % gdal_translate -of "GTiff" %.img %.tif
+	basename -s.img *.img | xargs -n1 -I % gdal_translate -of "GTiff" %.img %.tif
 
 __Reproject raster:__
 
@@ -279,10 +279,6 @@ __MODIS operations__
 
 First, download relevant .hdf tiles from the MODIS ftp site: <ftp://ladsftp.nascom.nasa.gov/>; use the [MODIS sinusoidal grid](http://www.geohealth.ou.edu/modis_v5/modis.shtml) for reference.
 
-Create a file containing the names of all .hdf files in the directory
-
-	ls -1 *.hdf > files.txt
-
 List MODIS Subdatasets in a given HDF (conf. the [MODIS products table](https://lpdaac.usgs.gov/products/modis_products_table/))
 
 	gdalinfo longFileName.hdf | grep SUBDATASET
@@ -290,12 +286,11 @@ List MODIS Subdatasets in a given HDF (conf. the [MODIS products table](https://
 Make TIFs from each file in list; replace 'MOD12Q1:Land_Cover_Type_1' with desired Subdataset name
 
 	mkdir output
-	cat files.txt | xargs -I % -n1 gdalwarp -of GTiff 'HDF4_EOS:EOS_GRID:%:MOD12Q1:Land_Cover_Type_1' output/%.tif
+	find . '*.hdf' -exec gdalwarp -of GTiff 'HDF4_EOS:EOS_GRID:"{}":MOD12Q1:Land_Cover_Type_1' output/{}.tif \;
 
 Merge all .tifs in output directory into single file
 
-	cd output
-	gdal_merge.py -o Merged_Landcover.tif *.tif
+	gdal_merge.py -o output/Merged_Landcover.tif output/*.tif
 
 __BASH functions__  
 _Size Functions_  
