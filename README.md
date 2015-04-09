@@ -275,6 +275,11 @@ Create shapefile based on parameters listed in the .vrt
 
 The VRT file can be modified to give a new output shapefile name, reference a different coordinate system (LayerSRS), or pull coordinates from different columns.
 
+__Extract polygons from raster__
+
+	gdal_polygonize.py input.tif -f "GeoJSON" output.json
+
+
 __MODIS operations__
 
 First, download relevant .hdf tiles from the MODIS ftp site: <ftp://ladsftp.nascom.nasa.gov/>; use the [MODIS sinusoidal grid](http://www.geohealth.ou.edu/modis_v5/modis.shtml) for reference.
