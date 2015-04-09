@@ -219,6 +219,10 @@ __Burn vector into raster__
 
 	gdal_rasterize -b 1 -i -burn -32678 -l layername input.shp input.tif
 
+__Extract polygons from raster__
+
+	gdal_polygonize.py input.tif -f "GeoJSON" output.json
+
 __Create contours from DEM__
 
 	gdal_contour -a elev -i 50 input_dem.tif output_contours.shp
@@ -274,11 +278,6 @@ Create shapefile based on parameters listed in the .vrt
 	ogr2ogr -f "ESRI Shapefile" shp/ inputfile.vrt
 
 The VRT file can be modified to give a new output shapefile name, reference a different coordinate system (LayerSRS), or pull coordinates from different columns.
-
-__Extract polygons from raster__
-
-	gdal_polygonize.py input.tif -f "GeoJSON" output.json
-
 
 __MODIS operations__
 
