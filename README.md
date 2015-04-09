@@ -68,6 +68,8 @@ Assumes that filename and name of layer of interest are the same...
 
 	basename -s.shp *.shp | xargs -n1 -I % ogr2ogr %-subset.shp %.shp -sql "SELECT field-one, field-two FROM '%' WHERE field-one='value-of-interest'"
 
+__Extract data from a PostGis database to a GeoJSON file__
+
 	ogr2ogr -f "GeoJSON" file.geojson PG:"host=localhost dbname=database user=user password=password" \
 	-sql "SELECT * from table_name"
 
