@@ -211,9 +211,15 @@ Finally, color the slope raster based on angles in color-slope.txt:
 
 __Resample (resize) raster__
 
-	gdalwarp -ts <width> <height> -r cubicspline dem.tif resampled_dem.tif
+	gdalwarp -ts <width> <height> -r cubic dem.tif resampled_dem.tif
 
 Entering 0 for either width or height guesses based on current dimensions.
+
+Alternatively,
+	
+	gdalwarp -outsize 10% 10% -r cubic dem.tif resampled_dem.tif
+
+For both of these, `-r cubic` specifies cubic interpolation: when resampling continuous data (like a DEM), the default nearest neighbor interpolation can result in "stair step" artifacts.
 
 __Burn vector into raster__
 
