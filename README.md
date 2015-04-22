@@ -237,6 +237,11 @@ __Get values for a specific location in a raster__
 
 	gdallocationinfo -xml -wgs84 input.tif <lon> <lat>  
 
+__Convert GRIB band to .tif__
+	
+	gdal_translate input.grib -a_ullr -180 -90 180 90 -a_srs EPSG:4326 -b 1 output_band1.jpg
+	
+Assumes data for entire globe in WGS84. Be sure to specify band, or you may end up with a nonsense RGB image composed of the first three.
 
 Other
 ---
