@@ -96,7 +96,7 @@ This will produce a vector file with the part of `file1.shp` that doesn't inters
 
 Or, do it all as a one-liner:
 
-SUBTRACT_FROM_SHP=file1 SUBTRACT_SHP=file2; echo '<OGRVRTDataSource><OGRVRTLayer name="'$SUBTRACT_FROM_SHP'"><SrcDataSource>'$SUBTRACT_FROM_SHP'.shp</SrcDataSource></OGRVRTLayer><OGRVRTLayer name="'$SUBTRACT_SHP'"><SrcDataSource>'$SUBTRACT_SHP'.shp</SrcDataSource></OGRVRTLayer></OGRVRTDataSource>' | ogr2ogr -f "ESRI Shapefile" difference.shp /vsistdin/ -dialect sqlite -sql "SELECT ST_Difference($SUBTRACT_FROM_SHP.geometry,$SUBTRACT_SHP.geometry) AS geometry FROM $SUBTRACT_FROM_SHP,$SUBTRACT_SHP"
+	SUBTRACT_FROM_SHP=file1 SUBTRACT_SHP=file2; echo '<OGRVRTDataSource><OGRVRTLayer name="'$SUBTRACT_FROM_SHP'"><SrcDataSource>'$SUBTRACT_FROM_SHP'.shp</SrcDataSource></OGRVRTLayer><OGRVRTLayer name="'$SUBTRACT_SHP'"><SrcDataSource>'$SUBTRACT_SHP'.shp</SrcDataSource></OGRVRTLayer></OGRVRTDataSource>' | ogr2ogr -f "ESRI Shapefile" difference.shp /vsistdin/ -dialect sqlite -sql "SELECT ST_Difference($SUBTRACT_FROM_SHP.geometry,$SUBTRACT_SHP.geometry) AS geometry FROM $SUBTRACT_FROM_SHP,$SUBTRACT_SHP"
 
 Raster operations
 ---
