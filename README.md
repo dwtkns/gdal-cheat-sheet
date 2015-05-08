@@ -73,6 +73,31 @@ __Extract data from a PostGis database to a GeoJSON file__
 	ogr2ogr -f "GeoJSON" file.geojson PG:"host=localhost dbname=database user=user password=password" \
 	-sql "SELECT * from table_name"
 
+__Get the difference between two vector files__
+
+Create a `layers.vrt` file that looks like:
+
+```
+<OGRVRTDataSource>
+	<OGRVRTLayer name="file1">
+		<SrcDataSource>file1.shp</SrcDataSource>
+	</OGRVRTLayer>
+	<OGRVRTLayer name="file2">
+		<SrcDataSource>file2.shp</SrcDataSource>
+	</OGRVRTLayer>
+</OGRVRTDataSource>
+```
+
+Then run:
+
+	ogr2ogr -f "ESRI Shapefile" difference.shp layers.vrt -dialect sqlite -sql "SELECT ST_Difference(file1.geometry,file2.geometry) AS geometry FROM file1,file2"
+
+This will produce a vector file with the part of `file1.shp` that doesn't intersect with `file2.shp`.
+
+Or, do it all as a one-liner:
+
+	SUBTRACT_FROM_SHP=file1 SUBTRACT_SHP=file2; echo '<OGRVRTDataSource><OGRVRTLayer name="'$SUBTRACT_FROM_SHP'"><SrcDataSource>'$SUBTRACT_FROM_SHP'.shp</SrcDataSource></OGRVRTLayer><OGRVRTLayer name="'$SUBTRACT_SHP'"><SrcDataSource>'$SUBTRACT_SHP'.shp</SrcDataSource></OGRVRTLayer></OGRVRTDataSource>' | ogr2ogr -f "ESRI Shapefile" difference.shp /vsistdin/ -dialect sqlite -sql "SELECT ST_Difference($SUBTRACT_FROM_SHP.geometry,$SUBTRACT_SHP.geometry) AS geometry FROM $SUBTRACT_FROM_SHP,$SUBTRACT_SHP"
+
 Raster operations
 ---
 __Get raster information__
