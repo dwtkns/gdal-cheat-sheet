@@ -45,7 +45,8 @@ __Merge features in a vector file by attribute ("dissolve")__
 	
 __Merge features ("dissolve") using a buffer to avoid slivers__
 
-	ogr2ogr -f "ESRI Shapefile" dissolved.shp input.shp -dialect sqlite -sql "select ST_union(ST_buffer(Geometry,0.001)),common_attribute from input GROUP BY common_attribute"
+	ogr2ogr -f "ESRI Shapefile" dissolved.shp input.shp -dialect sqlite \
+	-sql "select ST_union(ST_buffer(Geometry,0.001)),common_attribute from input GROUP BY common_attribute"
 
 __Merge vector files:__
 
@@ -90,13 +91,17 @@ Create a `layers.vrt` file that looks like:
 
 Then run:
 
-	ogr2ogr -f "ESRI Shapefile" difference.shp layers.vrt -dialect sqlite -sql "SELECT ST_Difference(file1.geometry,file2.geometry) AS geometry FROM file1,file2"
+	ogr2ogr -f "ESRI Shapefile" difference.shp layers.vrt -dialect sqlite \
+	-sql "SELECT ST_Difference(file1.geometry,file2.geometry) AS geometry FROM file1,file2"
 
 This will produce a vector file with the part of `file1.shp` that doesn't intersect with `file2.shp`.
 
 Or, do it all as a one-liner:
 
-	SUBTRACT_FROM_SHP=file1 SUBTRACT_SHP=file2; echo '<OGRVRTDataSource><OGRVRTLayer name="'$SUBTRACT_FROM_SHP'"><SrcDataSource>'$SUBTRACT_FROM_SHP'.shp</SrcDataSource></OGRVRTLayer><OGRVRTLayer name="'$SUBTRACT_SHP'"><SrcDataSource>'$SUBTRACT_SHP'.shp</SrcDataSource></OGRVRTLayer></OGRVRTDataSource>' | ogr2ogr -f "ESRI Shapefile" difference.shp /vsistdin/ -dialect sqlite -sql "SELECT ST_Difference($SUBTRACT_FROM_SHP.geometry,$SUBTRACT_SHP.geometry) AS geometry FROM $SUBTRACT_FROM_SHP,$SUBTRACT_SHP"
+	SUBTRACT_FROM_SHP=file1 SUBTRACT_SHP=file2; \
+	echo '<OGRVRTDataSource><OGRVRTLayer name="'$SUBTRACT_FROM_SHP'"><SrcDataSource>'$SUBTRACT_FROM_SHP'.shp</SrcDataSource></OGRVRTLayer><OGRVRTLayer name="'$SUBTRACT_SHP'"><SrcDataSource>'$SUBTRACT_SHP'.shp</SrcDataSource></OGRVRTLayer></OGRVRTDataSource>' | \
+	ogr2ogr -f "ESRI Shapefile" difference.shp /vsistdin/ -dialect sqlite \
+	-sql "SELECT ST_Difference($SUBTRACT_FROM_SHP.geometry,$SUBTRACT_SHP.geometry) AS geometry FROM $SUBTRACT_FROM_SHP,$SUBTRACT_SHP"
 
 __Spatial join:__
 
@@ -104,7 +109,9 @@ A spatial join transfers properties from one vector layer to another based on a 
 
 Given a set of points (trees.shp) and a set of polygons (parks.shp) in the same directory, create a polygon layer with the geometries from parks.shp and summaries of some columns in trees.shp:
 
-    ogr2ogr -f 'ESRI Shapefile' output.shp parks.shp -dialect sqlite -sql "SELECT p.Geometry, p.id id, SUM(t.field1) field1_sum, AVG(t.field2) field2_avg FROM parks p, 'trees.shp'.trees t WHERE ST_Contains(p.Geometry, t.Geometry) GROUP BY p.id"
+    ogr2ogr -f 'ESRI Shapefile' output.shp parks.shp -dialect sqlite \
+    -sql "SELECT p.Geometry, p.id id, SUM(t.field1) field1_sum, AVG(t.field2) field2_avg
+    FROM parks p, 'trees.shp'.trees t WHERE ST_Contains(p.Geometry, t.Geometry) GROUP BY p.id"
 
 Note that features that from parks.shp that don't overlap with trees.shp won't be in the new file.
 
@@ -151,7 +158,8 @@ Be sure to add _-r bilinear_ if reprojecting elevation data to prevent funky ban
 
 __Georeference an unprojected image with known bounding coordinates:__
 
-	gdal_translate -of GTiff -a_ullr <top_left_lon> <top_left_lat> <bottom_right_lon> <bottom_right_lat> -a_srs EPSG:4269 input.png output.tif
+	gdal_translate -of GTiff -a_ullr <top_left_lon> <top_left_lat> <bottom_right_lon> <bottom_right_lat> \
+	-a_srs EPSG:4269 input.png output.tif
 
 __Clip raster by bounding box__
 
