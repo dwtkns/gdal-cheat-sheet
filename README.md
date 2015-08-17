@@ -27,6 +27,12 @@ __Print count of features with attributes matching a given pattern__
 
 	ogrinfo input.shp layer-name | grep "Search Pattern" | sort | uniq -c
 
+__Read from a zip file__
+
+This assumes that archive.zip is in the current directory. This example just extracts the file, but any ogr2ogr operation should work. It's also possible to write to existing zip files.
+
+	ogr2ogr -f 'GeoJSON' dest.geojson /vsizip/archive.zip/zipped_dir/in.geojson
+
 __Clip vectors by bounding box__
 
 	ogr2ogr -f "ESRI Shapefile" output.shp input.shp -clipsrc <x_min> <y_min> <x_max> <y_max>
