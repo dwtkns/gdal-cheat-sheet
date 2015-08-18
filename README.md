@@ -80,6 +80,12 @@ __Extract data from a PostGis database to a GeoJSON file__
 	ogr2ogr -f "GeoJSON" file.geojson PG:"host=localhost dbname=database user=user password=password" \
 	-sql "SELECT * from table_name"
 
+__Extract data from an ESRI REST API__
+
+Services that use ESRI maps are sometimes powered by a REST server that can provide data in OGR can consume. Finding the correct end point can be tricky and may take some false starts.
+
+	ogr2ogr -f GeoJSON output.geojson "http:/example.com/arcgis/rest/services/SERVICE/LAYER/MapServer/0/query?f=json&returnGeometry=true&etc=..." OGRGeoJSON
+
 __Get the difference between two vector files__
 
 Create a `layers.vrt` file that looks like:
