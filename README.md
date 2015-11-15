@@ -325,36 +325,20 @@ Convert the desired KML layer to CSV
 	ogr2ogr -f CSV output.csv input.kml -sql "select *,OGR_GEOM_WKT from some_kml_layer"
 
 __CSV points to SHP__  
-_This section needs retooling_  
-Given input.csv
 
-	lon_column,lat_column,value
-	-81,32,13
-	-81,32,14
-	-81,32,15
+Given `input.csv`:
 
-Make a .dbf table for ogr2ogr to work with from input.csv
+	lon,lat,value
+	-81,31,13
+	-80,32,14
+	-81,33,15
 
-	ogr2ogr -f "ESRI Shapefile" input.dbf input.csv
+Create a shapefile, using Spatialite functions to generate the point:
 
-Use a text editor to create a .vrt file in the same directory as input.csv and input.dbf. This file holds the parameters for building a full shapefile based on values in the DBF you just made.
+	ogr2ogr output.shp input.csv -dialect sqlite \
+	-sql "SELECT MakePoint(CAST(lon as REAL), CAST(lat as REAL), 4326) Geometry, * FROM input"
 
-	<OGRVRTDataSource>
-	  <OGRVRTLayer name="output_file_name">
-	    <SrcDataSource relativeToVRT="1">./</SrcDataSource>
-	    <SrcLayer>input</SrcLayer>
-	    <GeometryType>wkbPoint</GeometryType>
-	    <LayerSRS>WGS84</LayerSRS>
-	    <GeometryField encoding="PointFromColumns" x="lon_column" y="lat_column"/>
-	  </OGRVRTLayer>
-	</OGRVRTDataSource>
-
-Create shapefile based on parameters listed in the .vrt
-
-	mkdir shp
-	ogr2ogr -f "ESRI Shapefile" shp/ inputfile.vrt
-
-The VRT file can be modified to give a new output shapefile name, reference a different coordinate system (LayerSRS), or pull coordinates from different columns.
+Note the 4326, which refers to a spatial reference (in this case [`EPSG:4326`](http://epsg.io/4326)). Use the correct code for your data.
 
 __MODIS operations__
 
