@@ -98,32 +98,13 @@ Services that use ESRI maps are sometimes powered by a REST server that can prov
 
 __Get the difference between two vector files__
 
-Create a `layers.vrt` file that looks like:
+Given two files that both have an id field, this will produce a vector file with the part of `file1.shp` that doesn't intersect with `file2.shp`:
 
-```
-<OGRVRTDataSource>
-	<OGRVRTLayer name="file1">
-		<SrcDataSource>file1.shp</SrcDataSource>
-	</OGRVRTLayer>
-	<OGRVRTLayer name="file2">
-		<SrcDataSource>file2.shp</SrcDataSource>
-	</OGRVRTLayer>
-</OGRVRTDataSource>
-```
+    ogr2ogr diff.shp file1.shp -dialect sqlite \
+    -sql "SELECT ST_Difference(a.Geometry, b.Geometry) AS Geometry, a.id \
+    FROM file1 a LEFT JOIN 'file2.shp'.file2 b USING (id) WHERE a.Geometry != b.Geometry"
 
-Then run:
-
-	ogr2ogr -f "ESRI Shapefile" difference.shp layers.vrt -dialect sqlite \
-	-sql "SELECT ST_Difference(file1.geometry,file2.geometry) AS geometry FROM file1,file2"
-
-This will produce a vector file with the part of `file1.shp` that doesn't intersect with `file2.shp`.
-
-Or, do it all as a one-liner:
-
-	SUBTRACT_FROM_SHP=file1 SUBTRACT_SHP=file2; \
-	echo '<OGRVRTDataSource><OGRVRTLayer name="'$SUBTRACT_FROM_SHP'"><SrcDataSource>'$SUBTRACT_FROM_SHP'.shp</SrcDataSource></OGRVRTLayer><OGRVRTLayer name="'$SUBTRACT_SHP'"><SrcDataSource>'$SUBTRACT_SHP'.shp</SrcDataSource></OGRVRTLayer></OGRVRTDataSource>' | \
-	ogr2ogr -f "ESRI Shapefile" difference.shp /vsistdin/ -dialect sqlite \
-	-sql "SELECT ST_Difference($SUBTRACT_FROM_SHP.geometry,$SUBTRACT_SHP.geometry) AS geometry FROM $SUBTRACT_FROM_SHP,$SUBTRACT_SHP"
+This assumes that `file2.shp` and `file2.shp` are both in the current directory.
 
 __Spatial join:__
 
