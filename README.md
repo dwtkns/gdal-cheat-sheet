@@ -45,6 +45,16 @@ __Reproject vector:__
 
 	ogr2ogr output.shp -t_srs "EPSG:4326" input.shp
 
+__Add an index to a shapefile__
+
+Add an index on an attribute:
+
+	ogrinfo example.shp -sql "CREATE INDEX ON example USING fieldname"
+
+Add a spatial index:
+
+	ogrinfo example.shp -sql "CREATE SPATIAL INDEX ON example"
+
 __Merge features in a vector file by attribute ("dissolve")__
 
 	ogr2ogr -f "ESRI Shapefile" dissolved.shp input.shp -dialect sqlite -sql "select ST_union(Geometry),common_attribute from input GROUP BY common_attribute"
