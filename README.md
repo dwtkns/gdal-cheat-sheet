@@ -27,6 +27,12 @@ __Print count of features with attributes matching a given pattern__
 
 	ogrinfo input.shp layer-name | grep "Search Pattern" | sort | uniq -c
 
+__Read from a zip file__
+
+This assumes that archive.zip is in the current directory. This example just extracts the file, but any ogr2ogr operation should work. It's also possible to write to existing zip files.
+
+	ogr2ogr -f 'GeoJSON' dest.geojson /vsizip/archive.zip/zipped_dir/in.geojson
+
 __Clip vectors by bounding box__
 
 	ogr2ogr -f "ESRI Shapefile" output.shp input.shp -clipsrc <x_min> <y_min> <x_max> <y_max>
@@ -38,6 +44,16 @@ __Clip one vector by another__
 __Reproject vector:__
 
 	ogr2ogr output.shp -t_srs "EPSG:4326" input.shp
+
+__Add an index to a shapefile__
+
+Add an index on an attribute:
+
+	ogrinfo example.shp -sql "CREATE INDEX ON example USING fieldname"
+
+Add a spatial index:
+
+	ogrinfo example.shp -sql "CREATE SPATIAL INDEX ON example"
 
 __Merge features in a vector file by attribute ("dissolve")__
 
@@ -74,34 +90,21 @@ __Extract data from a PostGis database to a GeoJSON file__
 	ogr2ogr -f "GeoJSON" file.geojson PG:"host=localhost dbname=database user=user password=password" \
 	-sql "SELECT * from table_name"
 
+__Extract data from an ESRI REST API__
+
+Services that use ESRI maps are sometimes powered by a REST server that can provide data in OGR can consume. Finding the correct end point can be tricky and may take some false starts.
+
+	ogr2ogr -f GeoJSON output.geojson "http:/example.com/arcgis/rest/services/SERVICE/LAYER/MapServer/0/query?f=json&returnGeometry=true&etc=..." OGRGeoJSON
+
 __Get the difference between two vector files__
 
-Create a `layers.vrt` file that looks like:
+Given two files that both have an id field, this will produce a vector file with the part of `file1.shp` that doesn't intersect with `file2.shp`:
 
-```
-<OGRVRTDataSource>
-	<OGRVRTLayer name="file1">
-		<SrcDataSource>file1.shp</SrcDataSource>
-	</OGRVRTLayer>
-	<OGRVRTLayer name="file2">
-		<SrcDataSource>file2.shp</SrcDataSource>
-	</OGRVRTLayer>
-</OGRVRTDataSource>
-```
+    ogr2ogr diff.shp file1.shp -dialect sqlite \
+    -sql "SELECT ST_Difference(a.Geometry, b.Geometry) AS Geometry, a.id \
+    FROM file1 a LEFT JOIN 'file2.shp'.file2 b USING (id) WHERE a.Geometry != b.Geometry"
 
-Then run:
-
-	ogr2ogr -f "ESRI Shapefile" difference.shp layers.vrt -dialect sqlite \
-	-sql "SELECT ST_Difference(file1.geometry,file2.geometry) AS geometry FROM file1,file2"
-
-This will produce a vector file with the part of `file1.shp` that doesn't intersect with `file2.shp`.
-
-Or, do it all as a one-liner:
-
-	SUBTRACT_FROM_SHP=file1 SUBTRACT_SHP=file2; \
-	echo '<OGRVRTDataSource><OGRVRTLayer name="'$SUBTRACT_FROM_SHP'"><SrcDataSource>'$SUBTRACT_FROM_SHP'.shp</SrcDataSource></OGRVRTLayer><OGRVRTLayer name="'$SUBTRACT_SHP'"><SrcDataSource>'$SUBTRACT_SHP'.shp</SrcDataSource></OGRVRTLayer></OGRVRTDataSource>' | \
-	ogr2ogr -f "ESRI Shapefile" difference.shp /vsistdin/ -dialect sqlite \
-	-sql "SELECT ST_Difference($SUBTRACT_FROM_SHP.geometry,$SUBTRACT_SHP.geometry) AS geometry FROM $SUBTRACT_FROM_SHP,$SUBTRACT_SHP"
+This assumes that `file2.shp` and `file2.shp` are both in the current directory.
 
 __Spatial join:__
 
@@ -303,36 +306,20 @@ Convert the desired KML layer to CSV
 	ogr2ogr -f CSV output.csv input.kml -sql "select *,OGR_GEOM_WKT from some_kml_layer"
 
 __CSV points to SHP__  
-_This section needs retooling_  
-Given input.csv
 
-	lon_column,lat_column,value
-	-81,32,13
-	-81,32,14
-	-81,32,15
+Given `input.csv`:
 
-Make a .dbf table for ogr2ogr to work with from input.csv
+	lon,lat,value
+	-81,31,13
+	-80,32,14
+	-81,33,15
 
-	ogr2ogr -f "ESRI Shapefile" input.dbf input.csv
+Create a shapefile, using Spatialite functions to generate the point:
 
-Use a text editor to create a .vrt file in the same directory as input.csv and input.dbf. This file holds the parameters for building a full shapefile based on values in the DBF you just made.
+	ogr2ogr output.shp input.csv -dialect sqlite \
+	-sql "SELECT MakePoint(CAST(lon as REAL), CAST(lat as REAL), 4326) Geometry, * FROM input"
 
-	<OGRVRTDataSource>
-	  <OGRVRTLayer name="output_file_name">
-	    <SrcDataSource relativeToVRT="1">./</SrcDataSource>
-	    <SrcLayer>input</SrcLayer>
-	    <GeometryType>wkbPoint</GeometryType>
-	    <LayerSRS>WGS84</LayerSRS>
-	    <GeometryField encoding="PointFromColumns" x="lon_column" y="lat_column"/>
-	  </OGRVRTLayer>
-	</OGRVRTDataSource>
-
-Create shapefile based on parameters listed in the .vrt
-
-	mkdir shp
-	ogr2ogr -f "ESRI Shapefile" shp/ inputfile.vrt
-
-The VRT file can be modified to give a new output shapefile name, reference a different coordinate system (LayerSRS), or pull coordinates from different columns.
+Note the 4326, which refers to a spatial reference (in this case [`EPSG:4326`](http://epsg.io/4326)). Use the correct code for your data.
 
 __MODIS operations__
 
