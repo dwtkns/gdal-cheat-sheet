@@ -206,7 +206,7 @@ __Raster calculation (map algebra)__
 
 Average two rasters:
 
-	gdal_calc.py -A input1.tif -B input2.tif --outfile=output.tif --calc="(A+B)/2"
+	gdal_calc.py -A input1.tif -B input2.tif --outfile=output.tif --calc="(A/2+B/2)"
 
 Add two rasters:
 
