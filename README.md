@@ -23,6 +23,14 @@ __Convert between vector formats__
 
 	ogr2ogr -f "GeoJSON" output.json input.shp
 
+__Convert osm file into a Shapefile__
+
+	ogr2ogr -f "ESRI Shapefile" outputdir input.osm
+	
+__Convert osm.pbf file into a SpatiaLite database__
+
+	ogr2ogr -f "SQLite" -dsco SPATIALITE=YES output.db input.osm.pbf
+
 __Print count of features with attributes matching a given pattern__
 
 	ogrinfo input.shp layer-name | grep "Search Pattern" | sort | uniq -c
