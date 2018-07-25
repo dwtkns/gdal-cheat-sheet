@@ -288,7 +288,18 @@ __Convert GRIB band to .tif__
 Assumes data for entire globe in WGS84. Be sure to specify band, or you may end up with a nonsense RGB image composed of the first three.
 
 	gdal_translate input.grib -a_ullr -180 -90 180 90 -a_srs EPSG:4326 -b 1 output_band1.tif
+
+__Change scale and offset factors in a raster__
+
+	gdal_edit.py -offset 0 -scale 3.05185094759971e-05 input.tif
 	
+__Remove nodata value in a raster__
+
+	gdal_edit.py -unsetnodata input.tif
+
+__Set nodata value in a raster__
+
+	gdal_edit.py -a_nodata -32768 input.tif
 
 Other
 ---
