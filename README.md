@@ -90,6 +90,19 @@ __Extract data from a PostGis database to a GeoJSON file__
 	ogr2ogr -f "GeoJSON" file.geojson PG:"host=localhost dbname=database user=user password=password" \
 	-sql "SELECT * from table_name"
 
+__Extract data from a PostGis database to shp clipped by other shp__
+
+	ogr2ogr -progress -skipfailures -f "ESRI Shapefile" PG:"host=localhost dbname=database user=user password=password" \
+	table_name  -a_srs EPSG:27700 -clipsrc clipsource.shp
+		
+__Upload CSV data to  PostGis database__
+
+	ogr2ogr -progress -f Postgresql pg PG:"host=localhost dbname=database user=user password=password port=port" \
+	-nln new_table_name  data.csv
+__Upload DBF data to  PostGis database__
+
+	ogr2ogr -progress -f Postgresql pg PG:"host=localhost dbname=database user=user password=password port=port" \
+	lco PRECISION=no DBF_NAME.dbf -nln "TABLE_NAME"
 __Extract data from an ESRI REST API__
 
 Services that use ESRI maps are sometimes powered by a REST server that can provide data in OGR can consume. Finding the correct end point can be tricky and may take some false starts.
@@ -118,6 +131,13 @@ Given a set of points (trees.shp) and a set of polygons (parks.shp) in the same 
 
 Note that features that from parks.shp that don't overlap with trees.shp won't be in the new file.
 
+__Copying between databases:__
+
+   ```
+  ogr2ogr -f PostgreSQL --config PG_USE_COPY YES \ 
+ PG:"dbname='ToDatabase' host='localhost' port='5432' user='username'password='password'"  \ 
+  PG:"dbname='FromDatabase' host='localhost' port='5432' user='username' password='password'" layer1 layer2
+```
 Raster operations
 ---
 __Get raster information__
@@ -267,6 +287,11 @@ Alternatively,
 
 For both of these, `-r cubic` specifies cubic interpolation: when resampling continuous data (like a DEM), the default nearest neighbor interpolation can result in "stair step" artifacts.
 
+__Compress tiffs__
+
+	gdal_translate -co "COMPRESS=lzw" -co predictor=2 aerial.tif.0.tif aerial.0._comp.tif
+
+
 __Burn vector into raster__
 
 	gdal_rasterize -b 1 -i -burn -32678 -l layername input.shp input.tif
@@ -292,6 +317,14 @@ Assumes data for entire globe in WGS84. Be sure to specify band, or you may end 
 
 Other
 ---
+
+__Encoding errors__
+
+	SET PGCLIENTENCODING=LATIN1
+or 
+
+	SET PGCLIENTENCODING=UTF8
+
 __Convert KML points to CSV (simple)__
 
 	ogr2ogr -f CSV output.csv input.kmz -lco GEOMETRY=AS_XY
