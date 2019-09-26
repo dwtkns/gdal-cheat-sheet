@@ -103,6 +103,13 @@ __Upload DBF data to  PostGis database__
 
 	ogr2ogr -progress -f Postgresql pg PG:"host=localhost dbname=database user=user password=password port=port" \
 	lco PRECISION=no DBF_NAME.dbf -nln "TABLE_NAME"
+	
+__Upload Geopackage table to  PostGis database__
+
+	ogr2ogr -progress -f Postgresql pg:"dbname=database user=user password=password port=port" \
+	 -nln new_table_name  geopackage.gpkg -SQL "select* table_in_geopackage"
+	
+	
 __Extract data from an ESRI REST API__
 
 Services that use ESRI maps are sometimes powered by a REST server that can provide data in OGR can consume. Finding the correct end point can be tricky and may take some false starts.
