@@ -118,6 +118,11 @@ Given a set of points (trees.shp) and a set of polygons (parks.shp) in the same 
 
 Note that features that from parks.shp that don't overlap with trees.shp won't be in the new file.
 
+__Upload Geopackage table to  PostGis database__
+
+    ogr2ogr -progress -f Postgresql pg:"dbname=database user=user password=password port=port" \
+    -nln new_table_name  geopackage.gpkg -SQL "select* table_in_geopackage"
+	
 Raster operations
 ---
 __Get raster information__
